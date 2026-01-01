@@ -47,3 +47,12 @@ alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 dot config status.showUntrackedFiles no
 dot checkout
 ```
+
+## Install Dependencies
+
+Make executable and run the install script:
+
+```bash
+chmod +x ~/install.sh
+~/install.sh
+```
