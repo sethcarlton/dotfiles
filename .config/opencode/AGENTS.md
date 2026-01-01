@@ -48,3 +48,7 @@ npm run dev -- --ui=stream
 ```
 
 The stream UI provides readable output that works well in tmux sessions and for capturing logs, while the TUI (terminal user interface) is interactive and doesn't work well in detached sessions.
+
+## Task Tracking
+
+Use `bd` for task tracking. Run `bd ready` to see available tasks, `bd create` to add new tasks.
