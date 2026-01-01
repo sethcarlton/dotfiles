@@ -56,3 +56,20 @@ Make executable and run the install script:
 chmod +x ~/install.sh
 ~/install.sh
 ```
+
+## Initialize Global Beads
+
+Create a notes repo for personal task tracking (stealth mode - not committed to git):
+
+```bash
+mkdir -p ~/Developer/notes
+cd ~/Developer/notes
+git init
+bd init --stealth
+```
+
+Verify:
+
+```bash
+ls -la ~/Developer/notes/.beads
+```

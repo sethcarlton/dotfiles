@@ -118,5 +118,32 @@ case ":$PATH:" in
 esac
 # pnpm end
 
+# local scripts
+export PATH="$HOME/.local/bin:$PATH"
+
+# ============================================
+# fzf
+# ============================================
+if command -v fzf &> /dev/null; then
+    source <(fzf --zsh)
+fi
+
+# ============================================
+# tmux-sessionizer
+# ============================================
+bindkey -s ^f "tmux-sessionizer\n"
+
+# ============================================
+# Beads
+# ============================================
+export BEADS_GLOBAL="$HOME/Developer/notes/.beads"
+alias bdg="BEADS_DIR=$BEADS_GLOBAL bd"
+
+bdga() {
+    local label=$(basename "$PWD" | tr ' ' '-')
+    BEADS_DIR=$BEADS_GLOBAL bd create "$*" -l "$label"
+    echo "✓ Saved to global Beads with label #$label"
+}
+
 # Load private/local configuration (not tracked in git)
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
