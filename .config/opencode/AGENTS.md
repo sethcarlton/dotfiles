@@ -1,37 +1,30 @@
 # Global Agent Rules
 
-## General Rules
+## Dev Processes in Tmux
 
-In all interactions, plans, and commit messages, be extremely concise and sacrifice grammar for the sake of concision.
+**ALWAYS run watch mode processes (dev servers, tests, etc) in tmux windows.** This keeps them running in background without blocking.
 
-## Dev Processes in tmux
+Use descriptive window names: `dev`, `test`, `build`
 
-**ALWAYS run watch mode processes (dev servers, tests, etc) in tmux sessions.** This allows:
-- Non-blocking execution - lets the agent move on while stuff runs in background instead of sitting there waiting
-- Persistent sessions - keeps dev servers running and preserves test output context instead of constantly restarting
-- Checking output anytime by reading the tmux pane buffer
-- Handling interactive CLIs properly
-
-Use project-specific session names: `{project}_dev`, `{project}_test`
-
-Before starting, check if already running:
+If not in tmux (`$TMUX` is empty), first ensure session exists based on current directory:
 ```bash
-SESSION="$(basename "$PWD" | tr '.' '-')_dev"
-tmux ls 2>/dev/null | grep -q "^${SESSION}:" && echo "exists" || echo "not found"
+SESSION="$(basename "$PWD" | tr . _)"
+tmux has-session -t "$SESSION" 2>/dev/null || tmux new-session -d -s "$SESSION" -c "$PWD"
 ```
 
-If exists, read its output instead of restarting. DON'T kill and recreate unless explicitly needed.
-
-If not exists, create detached session:
+Before starting, check if window exists:
 ```bash
-SESSION="$(basename "$PWD" | tr '.' '-')_dev"
-tmux new-session -d -s "$SESSION" 'bun run dev'
+tmux select-window -t "$SESSION:dev" 2>/dev/null && echo "exists" || echo "not found"
 ```
 
-Check session output anytime:
+If exists, check its output instead of restarting. If not, create it:
 ```bash
-SESSION="$(basename "$PWD" | tr '.' '-')_dev"
-tmux capture-pane -pt "$SESSION"
+tmux neww -dn dev -t "$SESSION" 'bun run dev'
+```
+
+Check window output anytime:
+```bash
+tmux capture-pane -pt "$SESSION:dev" -S -100
 ```
 
 ### Turborepo
@@ -52,3 +45,7 @@ The stream UI provides readable output that works well in tmux sessions and for 
 ## Task Tracking
 
 Use `bd` for task tracking. Run `bd ready` to see available tasks, `bd create` to add new tasks.
+
+## Additional Important Instructions
+
+In all interactions, plans, and commit messages, be extremely concise and sacrifice grammar for the sake of concision.
