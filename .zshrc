@@ -132,6 +132,9 @@ fi
 # tmux-sessionizer
 # ============================================
 bindkey -s ^f "tmux-sessionizer\n"
+bindkey -s '\e1' "tmux-sessionizer -s 0\n"
+bindkey -s '\e2' "tmux-sessionizer -s 1\n"
+bindkey -s '\e3' "tmux-sessionizer -s 2\n"
 
 # ============================================
 # Beads
