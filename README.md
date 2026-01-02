@@ -1,75 +1,53 @@
 # Dotfiles
 
-My personal dotfiles, managed using a bare Git repository with `$HOME` as the working tree. This allows me to version control selected config files without turning my home directory into a Git repo.
+Personal dotfiles managed using a bare Git repository with `$HOME` as the working tree. This allows version controlling config files without turning the home directory into a Git repo.
 
-## Setup (primary machine)
+## Setup
+
+Clone on a new machine:
 
 ```bash
-git init --bare ~/.dotfiles
-alias dot="git --git-dir=$HOME/.dotfiles --work-tree=$HOME"
+git clone --bare git@github.com:sethcarlton/dotfiles.git ~/.dotfiles
+# or if starting fresh: git init --bare ~/.dotfiles
+
+alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
+
 dot config status.showUntrackedFiles no
+dot checkout
 ```
 
-Persist `dot` alias in your shell config (e.g. ~/.zshrc)
+Add `dot` alias to shell config:
 
 ```bash
 echo 'alias dot="git --git-dir=$HOME/.dotfiles --work-tree=$HOME"' >> ~/.zshrc
-source ~/.zshrc
 ```
 
 ## Usage
 
-Add and commit files:
-
 ```bash
-dot add ~/.zshrc ~/.config/opencode/config.json
-dot commit -m "Update dotfiles"
+dot add ~/.zshrc
+dot commit -m "msg"
 dot push
 ```
 
-Pull from remote:
+## Install
 
 ```bash
-dot pull
-```
-
-Apply updates to `$HOME`:
-
-```bash
-dot checkout
-```
-
-## Setup (secondary machine)
-
-```bash
-git clone --bare git@github.com:sethcarlton/dotfiles.git ~/.dotfiles
-alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
-dot config status.showUntrackedFiles no
-dot checkout
-```
-
-## Install Dependencies
-
-Make executable and run the install script:
-
-```bash
-chmod +x ~/install.sh
 ~/install.sh
 ```
 
-## Initialize Global Beads
+## Beads
 
-Create a notes repo for personal task tracking (stealth mode - not committed to git):
+Global task tracking (stealth, not committed):
 
 ```bash
-mkdir -p ~/Developer/notes
-cd ~/Developer/notes
+mkdir -p ~/Developer/notes && cd ~/Developer/notes
 git init
 bd init --stealth
 ```
 
-Verify:
+In project repos (stealth optional):
 
 ```bash
-ls -la ~/Developer/notes/.beads
+bd init
 ```
