@@ -62,6 +62,7 @@ log() {
 
 session_idx=""
 session_cmd=""
+window_name=""
 user_selected=""
 split_type=""
 VERSION="0.1.0"
@@ -94,7 +95,15 @@ while [[ "$#" -gt 0 ]]; do
             exit 1
         fi
 
-        session_cmd="${TS_SESSION_COMMANDS[$session_idx]}"
+        # Parse name:command format
+        entry="${TS_SESSION_COMMANDS[$session_idx]}"
+        if [[ "$entry" =~ ^([^:]+):(.+)$ ]]; then
+            window_name="${BASH_REMATCH[1]}"
+            session_cmd="${BASH_REMATCH[2]}"
+        else
+            session_cmd="$entry"
+            window_name=""
+        fi
 
         shift
         ;;
@@ -277,6 +286,9 @@ handle_window_session_cmd() {
     else
         log "executing session command: tmux neww -dt $target $session_cmd"
         tmux neww -dt $target "$session_cmd"
+        if [[ -n "$window_name" ]]; then
+            tmux rename-window -t "$target" "$window_name"
+        fi
         hydrate "$target" "$selected"
         tmux select-window -t $target
     fi
